@@ -30,6 +30,7 @@ const Product = sequelize.define('product', {
     price: {type: DataTypes.INTEGER, allowNull: false},
     count: {type: DataTypes.INTEGER, allowNull: false},
     additional_products: {type: DataTypes.JSON},
+    img: {type: DataTypes.STRING},
 })
 
 const CategoryProduct = sequelize.define('category_product', {
@@ -91,9 +92,6 @@ OrderProduct.belongsTo(Product)
 Product.hasMany(ProductInfo)
 ProductInfo.belongsTo(Product)
 
-Product.hasOne(Brand)
-Brand.belongsTo(Product)
-
 Product.hasMany(CategoryProduct)
 CategoryProduct.belongsTo(Product)
 
@@ -102,6 +100,9 @@ Rating.belongsTo(Product)
 
 Category.hasMany(CategoryProduct)
 CategoryProduct.belongsTo(Category)
+
+Brand.hasMany(Product)
+Product.belongsTo(Brand)
 
 module.exports = {
     User,
