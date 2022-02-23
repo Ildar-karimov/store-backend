@@ -37,19 +37,19 @@ class UserController {
         if(!comparePassword){
             return next(ApiError.internal('Неверный пароль'))
         }
-        const token = generateJwt(user.id, user.email, user.role)
+        const token = generateJwt(user.id, user.email, user.role, user.name, user.surname)
         return res.json({token})
     }
 
-    async checkAuthToken(req, res) {
-        const token = generateJwt(req.user.id, req.user.email, req.user.role)
+    async checkAuthToken(req, res, next) {
+        const token = generateJwt(req.user.id, req.user.email, req.user.role, req.user.name, req.user.surname)
         return res.json({token})
     }
 }
 
-const generateJwt = (id, email, role) => {
+const generateJwt = (id, email, role, name, surname) => {
     return jwt.sign(
-        {id, email, role},
+        {id, email, role, name, surname},
         process.env.SECRET_KEY,
         {expiresIn: '48h'}
     )
