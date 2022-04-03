@@ -1,75 +1,14 @@
-const sequelize = require('../db')
-const {DataTypes} = require('sequelize')
-
-const User = sequelize.define('user', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    email: {type: DataTypes.STRING, unique: true, allowNull: false},
-    password: {type: DataTypes.STRING, allowNull: false},
-    name: {type: DataTypes.STRING},
-    surname: {type: DataTypes.STRING},
-    role: {type: DataTypes.STRING, defaultValue: "USER"},
-})
-
-const Order = sequelize.define('order', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    status: {type: DataTypes.INTEGER, defaultValue: 0},
-    sum_total: {type: DataTypes.INTEGER},
-    start_date: {type: DataTypes.DATE},
-    end_date: {type: DataTypes.DATE},
-})
-
-const OrderProduct = sequelize.define('order_product', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    count: {type: DataTypes.INTEGER, defaultValue: 1},
-    price: {type: DataTypes.INTEGER},
-})
-
-const Product = sequelize.define('product', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, allowNull: false},
-    price: {type: DataTypes.INTEGER, allowNull: false},
-    count: {type: DataTypes.INTEGER, allowNull: false},
-    additional_products: {type: DataTypes.JSON},
-    img: {type: DataTypes.STRING},
-})
-
-const CategoryProduct = sequelize.define('category_product', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-})
-
-const Category = sequelize.define('category', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false}
-})
-
-const Brand = sequelize.define('brand', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false}
-})
-
-const PayType = sequelize.define('pay_type', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false}
-})
-
-const Shop = sequelize.define('shop', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
-    address: {type: DataTypes.STRING, allowNull: false},
-})
-
-const Rating = sequelize.define('rating', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    info: {type: DataTypes.STRING, unique: true, allowNull: false},
-    rate: {type: DataTypes.INTEGER, allowNull: false},
-    date: {type: DataTypes.DATE, allowNull: false},
-})
-
-const ProductInfo = sequelize.define('product_info', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING, allowNull: false},
-    description: {type: DataTypes.INTEGER, allowNull: false},
-})
+const User = require('./user-model')
+const Order = require('./order-model')
+const OrderProduct = require('./order-product-model')
+const Product = require('./product-model')
+const CategoryProduct = require('./category-product-model')
+const Category = require('./category-model')
+const Brand = require('./brand-model')
+const PayType = require('./paytype-model')
+const Shop = require('./shop-model')
+const Rating = require('./rating-model')
+const ProductInfo = require('./productinfo-model')
 
 User.hasOne(Order)
 Order.belongsTo(User)
