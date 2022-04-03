@@ -9,6 +9,10 @@ const PayType = require('./paytype-model')
 const Shop = require('./shop-model')
 const Rating = require('./rating-model')
 const ProductInfo = require('./productinfo-model')
+const Token = require('./token-model')
+
+User.hasOne(Token)
+Token.belongsTo(User)
 
 User.hasOne(Order)
 Order.belongsTo(User)
@@ -55,4 +59,5 @@ module.exports = {
     Category,
     CategoryProduct,
     Brand,
+    Token,
 }
