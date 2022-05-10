@@ -16,6 +16,10 @@ class ApiError extends Error{
     static forbidden(message){
         return new ApiError(403, message)
     }
+
+    static unauthorizedError(){
+        return new ApiError(401, 'Пользователь не найден')
+    }
 }
 
 module.exports = ApiError

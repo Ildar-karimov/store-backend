@@ -9,7 +9,7 @@ class UserController {
   async registration(req, res, next) {
 
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()) {
       return next(ApiError.badRequest('Ошибка валидации'))
     }
 
@@ -39,8 +39,13 @@ class UserController {
     if (!comparePassword) {
       return next(ApiError.internal('Неверный пароль'))
     }
-    const token = generateJwt(user.id, user.email, user.role, user.name, user.surname)
-    return res.json({token})
+    const userData = await userService.login(user)
+
+    res.cookie('refreshToken', userData.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    })
+    return res.json(userData)
   }
 
   async checkAuthToken(req, res, next) {
@@ -50,17 +55,32 @@ class UserController {
 
   async logout(req, res, next) {
     try {
+      const {refreshToken} = req.cookies
+      const token = await userService.logout(refreshToken)
+      res.clearCookie('refreshToken')
 
+      return res.json(token)
     } catch (e) {
-
+      next(e)
     }
   }
 
   async refresh(req, res, next) {
     try {
+      const {refreshToken} = req.cookies
+      if (!refreshToken) {
+        return next(ApiError.unauthorizedError())
+      }
 
+      const userData = await userService.refresh(refreshToken)
+      res.cookie('refreshToken', userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      })
+
+      return res.json(userData)
     } catch (e) {
-
+      next(e)
     }
   }
 }
