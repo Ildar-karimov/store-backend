@@ -3,9 +3,16 @@ const ApiError = require('../error/ApiError')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const userService = require('../services/userService')
+const {validationResult} = require('express-validator')
 
 class UserController {
   async registration(req, res, next) {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+      return next(ApiError.badRequest('Ошибка валидации'))
+    }
+
     const {email, password} = req.body
     if (!email || !password) {
       return next(ApiError.badRequest('некорректный email или пароль'))
