@@ -4,7 +4,7 @@ const ProductDto = require("../dtos/productDto");
 
 class ProductService {
   async getAll(query) {
-    let {brandId, currentPage, rowsOnPageCount, startPrice, endPrice} = query
+    let {brandId, currentPage, rowsOnPageCount, startPrice, endPrice, order, orderBy} = query
     currentPage = currentPage || 1
     rowsOnPageCount = rowsOnPageCount || 10
     startPrice = startPrice || 0
@@ -23,6 +23,7 @@ class ProductService {
       }
     }
     products = await Product.findAndCountAll({
+      order: [[orderBy, order]],
       where,
       limit: rowsOnPageCount,
       offset,
