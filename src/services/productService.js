@@ -1,5 +1,5 @@
 const {Op, REAL} = require("sequelize");
-const {Product} = require("../models/models");
+const {Product, ProductInfo} = require("../models/models");
 const ProductDto = require("../dtos/productDto");
 
 class ProductService {
@@ -35,6 +35,15 @@ class ProductService {
 
     products.rows = products.rows.map(product => new ProductDto(product))
     return products
+  }
+
+  async getOne(id) {
+    const product = await Product.findOne({
+      where: {id},
+      include: [{model: ProductInfo, as: 'info'}],
+    })
+
+    return new ProductDto(product)
   }
 }
 

@@ -40,12 +40,9 @@ class ProductController {
 
   async getOne(req, res) {
     const {id} = req.params
-    const product = await Product.findOne({
-      where: {id},
-      include: [{model: ProductInfo, as: 'info'}],
-    })
+    const productData = await productService.getOne(id)
 
-    return res.json(product)
+    return res.json(productData)
   }
 }
 
