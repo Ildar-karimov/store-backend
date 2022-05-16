@@ -13,6 +13,7 @@ class ProductService {
     let offset = currentPage * rowsOnPageCount - rowsOnPageCount
     let products
     let where = {}
+    let sort = []
 
     if (brandId) {
       where.brandId = brandId
@@ -22,8 +23,11 @@ class ProductService {
         [Op.between]: [startPrice, endPrice],
       }
     }
+    if (orderBy && order) {
+      sort.push([orderBy, order])
+    }
     products = await Product.findAndCountAll({
-      order: [[orderBy, order]],
+      order: sort,
       where,
       limit: rowsOnPageCount,
       offset,
