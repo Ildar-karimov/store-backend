@@ -55,14 +55,16 @@ class ProductService {
     product.info = product.info.map(infoOne => {
       return new productInfoDto(infoOne)
     })
-    product.additionalProducts = await Product.findAll({
-      where: {
-        id: {
-          [Op.or]: Array.from(product.additionalProducts.map(i => i.addProductId))
+    if (product.additionalProducts.length !== 0) {
+      product.additionalProducts = await Product.findAll({
+        where: {
+          id: {
+            [Op.or]: Array.from(product.additionalProducts.map(i => i.addProductId))
+          }
         }
-      }
-    })
-    product.additionalProducts = product.additionalProducts.map(product => new ProductDto(product))
+      })
+      product.additionalProducts = product.additionalProducts.map(addProduct => new ProductDto(addProduct))
+    }
 
     return new ProductDto((product))
   }
