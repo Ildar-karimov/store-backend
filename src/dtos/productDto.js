@@ -5,7 +5,8 @@ module.exports = class ProductDto {
   count;
   brandId;
   img;
-  additional_products;
+  additionalProducts;
+  info;
 
   constructor(props) {
     this.id = props.id
@@ -14,7 +15,8 @@ module.exports = class ProductDto {
     this.count = props.count
     this.brandId = props.brandId
     this.img = props.img
-    this.additional_products = props.additional_products
+    this.additionalProducts = props.additionalProducts
+    this.info = props.info
   }
 
 }

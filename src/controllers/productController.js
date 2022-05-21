@@ -1,4 +1,4 @@
-const {Product, ProductInfo} = require('../models/models')
+const {Product, ProductInfo, AdditionalProduct} = require('../models/models')
 const ApiError = require('../error/ApiError')
 const uuid = require('uuid')
 const path = require('path')
@@ -8,19 +8,28 @@ const productService = require('../services/productService')
 class ProductController {
   async create(req, res, next) {
     try {
-      let {name, price, count, additional_products, brandId, info} = req.body
+      let {name, price, count, additionalProducts, brandId, info} = req.body
+      additionalProducts =JSON.parse(additionalProducts)
+      info = JSON.parse(info)
       const {img} = req.files
       let fileName = uuid.v4() + '.jpg'
       await img.mv(path.resolve(__dirname, '..', 'static', fileName))
-      const product = await Product.create({name, price, count, additional_products, brandId, img: fileName})
+      const product = await Product.create({name, price, count, brandId, img: fileName})
 
-      if (info) {
-        info = JSON.parse(info)
+      if (info && info.length !== 0) {
         info.forEach(i => {
           ProductInfo.create({
             title: i.title,
             description: i.description,
             productId: product.id,
+          })
+        })
+      }
+      if (additionalProducts && additionalProducts.length !== 0) {
+        additionalProducts.forEach(i => {
+          AdditionalProduct.create({
+            productId: product.id,
+            addProductId: i,
           })
         })
       }

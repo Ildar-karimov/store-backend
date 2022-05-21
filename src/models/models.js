@@ -10,6 +10,7 @@ const Shop = require('./shop-model')
 const Rating = require('./rating-model')
 const ProductInfo = require('./productinfo-model')
 const Token = require('./token-model')
+const AdditionalProduct = require('./additional-product-model')
 
 User.hasOne(Token)
 Token.belongsTo(User)
@@ -34,6 +35,9 @@ OrderProduct.belongsTo(Product)
 
 Product.hasMany(ProductInfo, {as: 'info'})
 ProductInfo.belongsTo(Product)
+
+Product.hasMany(AdditionalProduct, {as: 'additionalProducts'})
+AdditionalProduct.belongsTo(Product)
 
 Product.hasMany(CategoryProduct)
 CategoryProduct.belongsTo(Product)
@@ -60,4 +64,5 @@ module.exports = {
     CategoryProduct,
     Brand,
     Token,
+    AdditionalProduct,
 }

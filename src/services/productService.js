@@ -1,6 +1,7 @@
-const {Op, REAL} = require("sequelize");
-const {Product, ProductInfo} = require("../models/models");
+const {Op, REAL, or} = require("sequelize");
+const {Product, ProductInfo, AdditionalProduct} = require("../models/models");
 const ProductDto = require("../dtos/productDto");
+const productInfoDto = require("../dtos/productInfoDto");
 
 class ProductService {
   async getAll(query) {
@@ -40,10 +41,30 @@ class ProductService {
   async getOne(id) {
     const product = await Product.findOne({
       where: {id},
-      include: [{model: ProductInfo, as: 'info'}],
+      include: [{
+        model: ProductInfo,
+        as: 'info',
+      }, {
+        model: AdditionalProduct,
+        as: 'additionalProducts',
+        attributes: ["addProductId"]
+      }
+      ],
     })
+    console.log(product.additionalProducts)
+    product.info = product.info.map(infoOne => {
+      return new productInfoDto(infoOne)
+    })
+    product.additionalProducts = await Product.findAll({
+      where: {
+        id: {
+          [Op.or]: Array.from(product.additionalProducts.map(i => i.addProductId))
+        }
+      }
+    })
+    product.additionalProducts = product.additionalProducts.map(product => new ProductDto(product))
 
-    return new ProductDto(product)
+    return new ProductDto((product))
   }
 }
 
