@@ -18,6 +18,7 @@ class OrderService {
       attributes: ['productId'],
       where: {orderId}
     })
+    if (productIds.length === 0) return []
     const products = await Product.findAll({
       where: {
         id: {
