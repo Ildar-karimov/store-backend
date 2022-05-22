@@ -3,8 +3,12 @@ const orderService = require('../services/orderService')
 const {Op} = require("sequelize");
 
 class OrderController {
-  async getBasketProducts() {
+  async getBasketProducts(req, res) {
+    const {id: userId} = req.user
+    const {id: orderId} = await orderService.getBasket(userId)
+    const productsData = await orderService.getProductsOfOrder(orderId)
 
+    return res.json(productsData)
   }
 
   async createProductAtBasket(req, res) {

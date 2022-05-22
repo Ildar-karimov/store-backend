@@ -34,8 +34,12 @@ class ProductService {
       offset,
     })
 
-    products.rows = products.rows.map(product => new ProductDto(product))
+    products.rows = this.formatProducts(products.rows)
     return products
+  }
+
+  formatProducts(products) {
+    return products.map(product => new ProductDto(product))
   }
 
   async getOne(id) {
