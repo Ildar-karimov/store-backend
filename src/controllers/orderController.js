@@ -21,7 +21,7 @@ class OrderController {
   }
 
   async deleteProductAtBasket(req, res) {
-    let {id: productId} = req.body
+    const {id: productId} = req.params
     const {id: userId} = req.user
     let {id: orderId} = await orderService.getBasket(userId)
     let deletedOrderProduct = await orderProductsModel.destroy({
