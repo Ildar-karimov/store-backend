@@ -1,6 +1,7 @@
 const orderProductsModel = require('../models/order-product-model')
 const orderService = require('../services/orderService')
 const {Op} = require("sequelize");
+const {Order} = require("../models/models");
 
 class OrderController {
   async getBasketProducts(req, res) {
@@ -9,6 +10,20 @@ class OrderController {
     const productsData = await orderService.getProductsOfOrder(orderId)
 
     return res.json(productsData)
+  }
+
+  async createOrder(req, res) {
+    const {id: userId} = req.user
+    const {id: orderId} = await orderService.getBasket(userId)
+    let orderData = await orderService.changeOrderStatus(orderId, 1)
+    await Order.create({userId})
+
+    return res.json(orderData)
+  }
+
+  async finishOrder(req, res) {
+    const {orderId} = req.body
+    return res.json(await orderService.changeOrderStatus(orderId, 2))
   }
 
   async createProductAtBasket(req, res) {

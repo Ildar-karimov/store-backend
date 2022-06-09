@@ -1,6 +1,6 @@
 const orderModel = require("../models/order-model");
 const orderProductsModel = require('../models/order-product-model')
-const {Op} = require("sequelize");
+const {Op, or} = require("sequelize");
 const {Product} = require("../models/models");
 const productService = require('./productService')
 
@@ -9,6 +9,16 @@ class OrderService {
     return await orderModel.findOne({
       where: {
         [Op.and]: [{userId}, {status: 0}]
+      }
+    })
+  }
+
+  async changeOrderStatus(orderId, statusCode) {
+    return await orderModel.update({
+      status: statusCode
+    }, {
+      where: {
+        id: orderId,
       }
     })
   }
