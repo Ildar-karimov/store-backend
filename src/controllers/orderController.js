@@ -74,7 +74,7 @@ class OrderController {
       }]
     })
 
-    for (const el of userOrders) {
+    for (const el of orders) {
       el.setDataValue('products', await orderService.getProductsOfOrder(el.id))
     }
     return res.json(orders)
