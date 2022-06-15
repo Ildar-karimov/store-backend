@@ -22,14 +22,9 @@ class OrderController {
     return res.json(orderData)
   }
 
-  async finishOrder(req, res) {
-    const {orderId} = req.body
-    return res.json(await orderService.changeOrderStatus(orderId, 3))
-  }
-
-  async readyToFinishOrder(req, res) {
-    const {orderId} = req.body
-    return res.json(await orderService.changeOrderStatus(orderId, 2))
+  async changeOrderStatus(req, res) {
+    const {orderId, statusCode} = req.body
+    return res.json(await orderService.changeOrderStatus(orderId, statusCode))
   }
 
   async createProductAtBasket(req, res) {
