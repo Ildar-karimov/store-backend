@@ -1,7 +1,8 @@
 const orderProductsModel = require('../models/order-product-model')
 const orderService = require('../services/orderService')
 const {Op} = require("sequelize");
-const {Order} = require("../models/models");
+const {Order, Product} = require("../models/models");
+const orderModel = require("../models/order-model");
 
 class OrderController {
   async getBasketProducts(req, res) {
@@ -48,8 +49,35 @@ class OrderController {
     return res.json(deletedOrderProduct)
   }
 
-  async getOrders() {
+  async getUserOrders(req, res) {
+    const {id: userId} = req.user
+    let userOrders = await orderModel.findAll({
+      where: {
+        [Op.or]: [{status: 1}, {status: 2}],
+        userId,
+      },
+    })
+    for (const el of userOrders) {
+      el.setDataValue('products', await orderService.getProductsOfOrder(el.id))
+    }
+    return res.json(userOrders)
+  }
 
+  async getAllOrders(req, res) {
+    let orders = await orderModel.findAll({
+      where: {
+        [Op.or]: [{status: 1}, {status: 2}],
+      },
+      include: [{
+        model: orderProductsModel,
+        attributes: ["productId"]
+      }]
+    })
+
+    for (const el of userOrders) {
+      el.setDataValue('products', await orderService.getProductsOfOrder(el.id))
+    }
+    return res.json(orders)
   }
 }
 

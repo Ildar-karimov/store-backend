@@ -10,4 +10,6 @@ router.delete('/delete-product-basket/:id', checkAuth, orderController.deletePro
 router.get('/create-order', checkAuth, orderController.createOrder)
 router.post('/finish-order',checkRole('ADMIN'), orderController.finishOrder)
 
+router.get('/user-orders',checkAuth, orderController.getUserOrders)
+router.get('/all-orders',checkRole('ADMIN'), orderController.getAllOrders)
 module.exports = router
