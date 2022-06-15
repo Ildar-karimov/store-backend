@@ -24,6 +24,11 @@ class OrderController {
 
   async finishOrder(req, res) {
     const {orderId} = req.body
+    return res.json(await orderService.changeOrderStatus(orderId, 3))
+  }
+
+  async readyToFinishOrder(req, res) {
+    const {orderId} = req.body
     return res.json(await orderService.changeOrderStatus(orderId, 2))
   }
 
@@ -53,7 +58,7 @@ class OrderController {
     const {id: userId} = req.user
     let userOrders = await orderModel.findAll({
       where: {
-        [Op.or]: [{status: 1}, {status: 2}],
+        [Op.or]: [{status: 1}, {status: 2}, {status: 3}],
         userId,
       },
     })
@@ -66,7 +71,7 @@ class OrderController {
   async getAllOrders(req, res) {
     let orders = await orderModel.findAll({
       where: {
-        [Op.or]: [{status: 1}, {status: 2}],
+        [Op.or]: [{status: 1}, {status: 2}, {status: 3}],
       },
       include: [{
         model: orderProductsModel,
