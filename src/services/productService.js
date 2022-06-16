@@ -16,14 +16,14 @@ class ProductService {
     let where = {}
     let sort = []
     let include = {}
-    if(categoryId) {
+    if (categoryId) {
       include = {
         model: CategoryProduct,
         where: {
           categoryId: categoryId,
         }
       }
-    }
+    } else include = null
     if (brandId) {
       where.brandId = brandId
     }
