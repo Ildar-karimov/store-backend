@@ -1,11 +1,11 @@
 const {Op, REAL, or} = require("sequelize");
-const {Product, ProductInfo, AdditionalProduct} = require("../models/models");
+const {Product, ProductInfo, AdditionalProduct, CategoryProduct} = require("../models/models");
 const ProductDto = require("../dtos/productDto");
 const productInfoDto = require("../dtos/productInfoDto");
 
 class ProductService {
   async getAll(query) {
-    let {brandId, currentPage, rowsOnPageCount, startPrice, endPrice, order, orderBy} = query
+    let {categoryId, brandId, currentPage, rowsOnPageCount, startPrice, endPrice, order, orderBy} = query
     currentPage = currentPage || 1
     rowsOnPageCount = rowsOnPageCount || 10
     startPrice = startPrice || 0
@@ -15,7 +15,15 @@ class ProductService {
     let products
     let where = {}
     let sort = []
-
+    let include = {}
+    if(categoryId) {
+      include = {
+        model: CategoryProduct,
+        where: {
+          categoryId: categoryId,
+        }
+      }
+    }
     if (brandId) {
       where.brandId = brandId
     }
@@ -30,6 +38,7 @@ class ProductService {
     products = await Product.findAndCountAll({
       order: sort,
       where,
+      include,
       limit: rowsOnPageCount,
       offset,
     })
