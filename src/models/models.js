@@ -11,6 +11,7 @@ const Rating = require('./rating-model')
 const ProductInfo = require('./productinfo-model')
 const Token = require('./token-model')
 const AdditionalProduct = require('./additional-product-model')
+const UserDataset = require('./user-dataset-model')
 
 User.hasOne(Token)
 Token.belongsTo(User)
@@ -50,6 +51,9 @@ CategoryProduct.belongsTo(Category)
 
 Brand.hasMany(Product)
 Product.belongsTo(Brand)
+
+UserDataset.hasMany(User)
+User.belongsTo(UserDataset)
 
 module.exports = {
     User,
