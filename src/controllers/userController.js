@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const userService = require('../services/userService')
 const {validationResult} = require('express-validator')
+const UserDataset = require("../models/user-dataset-model");
+const orderModel = require("../models/order-model");
 
 class UserController {
   async registration(req, res, next) {
@@ -82,6 +84,20 @@ class UserController {
     } catch (e) {
       next(e)
     }
+  }
+
+  async saveTestData(req, res) {
+    const dataset = await UserDataset.create(req.body)
+    const {id: userId} = req.user
+    await User.update({
+      userDatasetId: dataset.id
+    }, {
+      where: {
+        id: userId,
+      }
+    })
+
+    return res.json(dataset)
   }
 }
 

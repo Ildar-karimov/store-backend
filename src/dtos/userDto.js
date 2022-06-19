@@ -4,6 +4,7 @@ module.exports = class UserDto {
   role;
   name;
   surname;
+  userDatasetId;
 
   constructor(props) {
     this.id = props.id
@@ -11,6 +12,7 @@ module.exports = class UserDto {
     this.role = props.role
     this.name = props.name
     this.surname = props.surname
+    this.userDatasetId = props.userDatasetId || -1
   }
 
 }
